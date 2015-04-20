@@ -26,7 +26,7 @@ deactivate_previous_ruby_version () {
 
 _rbfu_activate () {
   local VERSION COMMAND MSG SOURCE
-  local RBFU_ROOT="$HOME/.rbfu"
+  local RBFU_ROOT="/opt"
   local RUBIES_ROOT="$RBFU_ROOT/rubies"
 
   # Run-time configuration
@@ -63,14 +63,18 @@ _rbfu_activate () {
 
     deactivate_previous_ruby_version
 
+    # determine Ruby API version
+    RUBY_API_VERSION=`$RUBY_ROOT/bin/ruby -rrbconfig -e 'print RbConfig::CONFIG["ruby_version"]'`
+    info "Ruby API version is $RUBY_API_VERSION"
+
     # activate requested version
     path_prepend "$RUBY_ROOT/lib/ruby/gems/bin"
     path_prepend "$RUBY_ROOT/bin"
     set_variable "RBFU_RUBY_VERSION" "$VERSION"
-    set_variable "GEM_PATH" "$RUBY_ROOT/lib/ruby/gems"
-    set_variable "GEM_HOME" "$RUBY_ROOT/lib/ruby/gems"
+    set_variable "GEM_PATH" "$RUBY_ROOT/lib/ruby/gems/$RUBY_API_VERSION"
+    set_variable "GEM_HOME" "$RUBY_ROOT/lib/ruby/gems/$RUBY_API_VERSION"
 
-    MSG="Activated Ruby $RBFU_RUBY_VERSION."
+    MSG="Activated Ruby $RBFU_RUBY_VERSION (API $RUBY_API_VERSION)"
   fi
 
   info "$MSG ($SOURCE)"

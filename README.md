@@ -1,8 +1,11 @@
 # rbfu
 
-## Deprecation Notice
+## About this fork
 
-**rbfu has been deprecated (as of 2013-02-25). Please use [chruby](https://github.com/postmodern/chruby) instead. [Read my blog post for details](http://sloblog.io/~hmans/NqLQrTKXRa0/i-m-deprecating-rbfu-please-use-chruby-instead).**
+This fork includes the following changes:
+
+* Use `/opt/rubies` instead of `$HOME/.rbfu`
+* Use the Ruby API version for setting `GEM_PATH`.
 
 ## Introduction
 
@@ -41,27 +44,17 @@ If this appeals to you, please give rbfu a spin.
 
 ## Installing rbfu
 
-### Using Homebrew
-
-If you're on OS X and using [Homebrew](http://mxcl.github.com/homebrew/), you can install rbfu through the following command:
-
-    brew install http://git.io/rbfu.rb
-
-Please don't forget to follow the instructions provided by the above command.
-
 ### Manual Installation
 
 If you're not using Homebrew, don't worry; installing rbfu is very straight-forward (and should work fine on Linux & friends, too).
 
-1. Download/clone the rbfu code and run the install script:
+1. Copy the `rbfu` script to `/usr/local/bin` or some other directory on your `$PATH`:
 
-        git clone git://github.com/hmans/rbfu.git
-        cd rbfu
-        ./install.sh
+2. Make it executable:
 
-    This will copy the `rbfu` executable to `/usr/local/bin`. If you need to install `rbfu` to a different directory, you can supply the `PREFIX` environment variable, manually copy `bin/rbfu` to a directory of your choosing, or add the provided `bin` directory to your PATH. Either way, all you need to do is make `rbfu` available in your `$PATH`.
+        chmod +x /usr/local/bin/rbfu
 
-2. Add the following initialization line to a **shell startup script** of your choosing (eg. `$HOME/.bash_profile`):
+3. Add the following initialization line to a **shell startup script** of your choosing (eg. `$HOME/.bash_profile`):
 
         eval "$(rbfu --init --auto)"
 
@@ -72,13 +65,13 @@ If you're not using Homebrew, don't worry; installing rbfu is very straight-forw
 
 ### Installing Rubies
 
-rbfu can switch between multiple installations of Ruby on the fly, and it expects them to live within directories named `$HOME/.rbfu/rubies/$VERSION/`. Feel free to install your favourite Ruby versions however you prefer to do it, but I recommend the excellent [ruby-build](https://github.com/sstephenson/ruby-build) tool.
+rbfu can switch between multiple installations of Ruby on the fly, and it expects them to live within directories named `/opt/rubies/$VERSION/`. Feel free to install your favourite Ruby versions however you prefer to do it, but I recommend the excellent [ruby-build](https://github.com/sstephenson/ruby-build) tool.
 
 Using ruby-build, here's how you'd install a bunch of popular Ruby versions:
 
-    ruby-build 1.8.7-p352 $HOME/.rbfu/rubies/1.8.7-p352
-    ruby-build 1.9.2-p290 $HOME/.rbfu/rubies/1.9.2-p290
-    ruby-build 1.9.3-p194 $HOME/.rbfu/rubies/1.9.3-p194
+    ruby-build 1.8.7-p352 /opt/rubies/1.8.7-p352
+    ruby-build 1.9.2-p290 /opt/rubies/1.9.2-p290
+    ruby-build 1.9.3-p194 /opt/rubies/1.9.3-p194
 
 Obviously, each installed Ruby version will have its own self-contained set of gems and associated binaries, so go wild!
 
