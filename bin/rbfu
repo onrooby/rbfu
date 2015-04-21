@@ -26,8 +26,7 @@ deactivate_previous_ruby_version () {
 
 _rbfu_activate () {
   local VERSION COMMAND MSG SOURCE RUBY_API_VERSION
-  local RBFU_ROOT="/opt"
-  local RUBIES_ROOT="$RBFU_ROOT/rubies"
+  local RUBIES_ROOT="$HOME/.rubies"
 
   # Run-time configuration
   #
@@ -40,9 +39,7 @@ _rbfu_activate () {
 
   # fall back to $PWD/.rbfu-version and $HOME/.rbfu-version if no version is given
   read_version_from_file () { if [ -f "$1" ]; then SOURCE="from $1"; VERSION=`head -n 1 $1`; fi; }
-  [ -n "$VERSION" ] || read_version_from_file "$PWD/.rbfu-version"
   [ -n "$VERSION" ] || read_version_from_file "$PWD/.ruby-version"
-  [ -n "$VERSION" ] || read_version_from_file "$HOME/.rbfu-version"
   [ -n "$VERSION" ] || read_version_from_file "$HOME/.ruby-version"
 
   # sanity checks
@@ -55,9 +52,14 @@ _rbfu_activate () {
     # additional sanity checks
     RUBY_ROOT="$RUBIES_ROOT/$VERSION"
     if [ ! -e $RUBY_ROOT ]; then
+      RUBIES_ROOT="/opt/rubies"
+      RUBY_ROOT="$RUBIES_ROOT/$VERSION"
+    fi
+    
+    if [ ! -e $RUBY_ROOT ]; then
       warn "Ruby $VERSION was requested, but is not installed. ($SOURCE)"
       warn "If you have ruby-build installed, you can install the requested version like this:"
-      warn "\nruby-build $VERSION \$HOME/.rbfu/rubies/$VERSION"
+      warn "\nruby-build $VERSION \$HOME/.rubies/$VERSION"
       return 1
     fi
 
