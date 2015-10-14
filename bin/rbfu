@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# version 2.0.0
+# released 2015-10-14
+
 # Useful methods. \o/
 #
 set_variable () { export $1="$2"; }
@@ -37,13 +40,12 @@ _rbfu_activate () {
   COMMAND="$@"
   SOURCE="from command line"
 
-  # fall back to $PWD/.rbfu-version and $HOME/.rbfu-version if no version is given
+  # fall back to $PWD/.ruby-version if no version is given
   read_version_from_file () { if [ -f "$1" ]; then SOURCE="from $1"; VERSION=`head -n 1 $1`; fi; }
   [ -n "$VERSION" ] || read_version_from_file "$PWD/.ruby-version"
-  [ -n "$VERSION" ] || read_version_from_file "$HOME/.ruby-version"
 
   # sanity checks
-  [ ! "$VERSION" ] && warn "Please specify the Ruby version to activate." && return
+  [ ! "$VERSION" ] && warn "Please specify the Ruby version to activate." && return 1
 
   if [[ "$VERSION" == "system" ]]; then
     deactivate_previous_ruby_version
@@ -57,7 +59,7 @@ _rbfu_activate () {
     fi
     
     if [ ! -e $RUBY_ROOT ]; then
-      warn "Ruby $VERSION was requested, but is not installed. ($SOURCE)"
+      warn "Ruby $VERSION was requested, but is not installed ($SOURCE)"
       warn "If you have ruby-build installed, you can install the requested version like this:"
       warn "\nruby-build $VERSION \$HOME/.rubies/$VERSION"
       return 1
@@ -66,7 +68,19 @@ _rbfu_activate () {
     deactivate_previous_ruby_version
 
     # determine Ruby API version
+    RUBY_BIN="$RUBY_ROOT/bin/ruby"
+    if [ ! -e $RUBY_BIN ]; then
+      warn "Could not find the ruby executable at $RUBY_BIN ($SOURCE)"
+      warn "Make sure that Ruby is properly installed at $RUBY_ROOT"
+      return 1
+    fi
+    
     RUBY_API_VERSION=`$RUBY_ROOT/bin/ruby -rrbconfig -e 'print RbConfig::CONFIG["ruby_version"]'`
+    if (($? > 0)); then
+      warn "Error determining Ruby API version"
+      warn "Make sure the requested version is properly installed"
+      return 1
+    fi
 
     # activate requested version
     path_prepend "$RUBY_ROOT/lib/ruby/gems/bin"
@@ -81,7 +95,11 @@ _rbfu_activate () {
   info "$MSG ($SOURCE)"
 
   # execute command, if given
-  [ -n "$COMMAND" ] && eval $COMMAND
+  if [ -n "$COMMAND" ]; then
+    eval $COMMAND
+  else
+    return 0
+  fi
 }
 
 
@@ -102,12 +120,13 @@ alias rbfu-env="source rbfu"
 # enable tab completion for bash and zsh
 if command -v complete >/dev/null 2>&1; then
   _rbfu_complete_version() {
-    if [ -d "$HOME/.rbfu/rubies" ]; then
+    if [ -d "$HOME/.rubies" ]; then
       cur="\${COMP_WORDS[COMP_CWORD]}"
-      opts=\$(\\ls -1 $HOME/.rbfu/rubies | sed -e "s/^/@/")
+      home_opts=\$(\\ls -1 $HOME/.rubies | sed -e "s/^/@/")
+      opt_opts=\$(\\ls -1 /opt/rubies | sed -e "s/^/@/")
 
       if [[ \$COMP_CWORD == 1 ]]; then
-        COMPREPLY=( \$(compgen -W "\${opts} @system" -- \${cur}) )
+        COMPREPLY=( \$(compgen -W "\${opt_opts} \${home_opts} @system" -- \${cur}) )
         return 0
       fi
     fi
@@ -122,7 +141,7 @@ elif command -v compdef >/dev/null 2>&1; then
 
     case \$state in
       versions)
-        _rubies=( \$(\\ls -1 "$HOME/.rbfu/rubies" 2>/dev/null | sed -e "s/^/@/") "@system" )
+        _rubies=( \$(\\ls -1 "$HOME/.rubies" 2>/dev/null | sed -e "s/^/@/") "@system" )
         _values 'rubies' \$_rubies && ret=0
         ;;
       args)
@@ -140,7 +159,7 @@ EOD
   if [ "$2" = "--auto" ]; then
     cat <<EOD
 function _rbfu_auto() {
-  ([ -f "\$PWD/.rbfu-version" ] || [ -f "\$PWD/.ruby-version" ]) && source rbfu true
+  [ -f "\$PWD/.ruby-version" ] && source rbfu true
   return 0
 }
 

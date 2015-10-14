@@ -1,11 +1,12 @@
-# rbfu
+# rbfu 2.0
 
 ## About this fork
 
 This fork includes the following changes:
 
-* Use `/opt/rubies` instead of `$HOME/.rbfu`
-* Use the Ruby API version for setting `GEM_PATH`.
+* Use `$HOME/.rubies` and `/opt/rubies` instead of `$HOME/.rbfu`
+* Use the Ruby API version for setting the correct `GEM_PATH`
+* Fix some shell exit codes.
 
 ## Introduction
 
