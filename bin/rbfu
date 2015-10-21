@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# version 2.0.0
-# released 2015-10-14
+RBFU_VERSION="2.0.1"
+RBFU_DATE="2015-10-21"
 
 # Useful methods. \o/
 #
@@ -107,8 +107,28 @@ _rbfu_activate () {
 #
 if [ "$1" = "--help" ]; then
   cat <<EOD
-rbfu [@<version>] [command]
+Usage:  rbfu [@<version>] [command]
+Options:
+        --help
+        --init [--auto]
+        --rubies
+        --version
 EOD
+  exit 0
+
+elif [ "$1" = "--version" ]; then
+  cat <<EOD
+rbfu, version $RBFU_VERSION ($RBFU_DATE, https://github.com/onrooby/rbfu)
+EOD
+  exit 0
+
+elif [ "$1" = "--list" ]; then
+  if [ -e "$HOME/.rubies" ]; then
+    ls -1 "$HOME/.rubies"
+  fi
+  if [ -e "/opt/rubies" ]; then
+    ls -1 "/opt/rubies"
+  fi
   exit 0
 
 # initialization code (run from shell startup script)
