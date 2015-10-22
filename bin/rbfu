@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-RBFU_VERSION="2.0.1"
-RBFU_DATE="2015-10-21"
+RBFU_VERSION="2.0.2"
+RBFU_DATE="2015-10-22"
 
 # Useful methods. \o/
 #
