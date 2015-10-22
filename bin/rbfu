@@ -111,7 +111,7 @@ Usage:  rbfu [@<version>] [command]
 Options:
         --help
         --init [--auto]
-        --rubies
+        --list
         --version
 EOD
   exit 0
