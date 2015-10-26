@@ -81,7 +81,7 @@ Obviously, each installed Ruby version will have its own self-contained set of g
 
 ### Basic Usage
 
-First and foremost, `rbfu` is meant to be invoked _explicitely_, meaning that you can prefix your commands with `rbfu`, and it will make sure those commands run in an environment that is configured to use the specified version of Ruby.
+First and foremost, `rbfu` is meant to be invoked _explicitly_, meaning that you can prefix your commands with `rbfu`, and it will make sure those commands run in an environment that is configured to use the specified version of Ruby.
 
 The basic syntax looks like this:
 
