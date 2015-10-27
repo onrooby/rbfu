@@ -1,0 +1,16 @@
+# Maintainer: Matthias Grosser <mtgrosser at gmx dot net>
+pkgname=rbfu
+
+pkgver=2.0.2
+pkgrel=1
+pkgdesc='Minimal Ruby Version Manager'
+arch=('any')
+url='https://github.com/onrooby/rbfu'
+source="https://github.com/onrooby/$pkgname/archive/v$pkgver.tar.gz"
+license=(MIT)
+md5sums=('3f0e013aa7629f602c171adbe2e67d8b')
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  install -Dm755 bin/$pkgname "$pkgdir/usr/bin/$pkgname"
+}
