@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-RBFU_VERSION="2.0.2"
-RBFU_DATE="2015-10-22"
+RBFU_VERSION="2.1.0"
+RBFU_DATE="2017-09-05"
 
 # Useful methods. \o/
 #
@@ -40,10 +40,11 @@ _rbfu_activate () {
   COMMAND="$@"
   SOURCE="from command line"
 
-  # fall back to $PWD/.ruby-version if no version is given
+  # fall back to ($RUBY_VERSION_DIR || $PWD)/.ruby-version if no version is given
+  if [ ! "$RUBY_VERSION_DIR" ]; then RUBY_VERSION_DIR="$PWD"; fi
   read_version_from_file () { if [ -f "$1" ]; then SOURCE="from $1"; VERSION=`head -n 1 $1`; fi; }
-  [ -n "$VERSION" ] || read_version_from_file "$PWD/.ruby-version"
-
+  [ -n "$VERSION" ] || read_version_from_file "$RUBY_VERSION_DIR/.ruby-version"
+  
   # sanity checks
   [ ! "$VERSION" ] && warn "Please specify the Ruby version to activate." && return 1
 
