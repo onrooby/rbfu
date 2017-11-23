@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-RBFU_VERSION="2.1.0"
-RBFU_DATE="2017-09-05"
+RBFU_VERSION="2.2.0"
+RBFU_DATE="2017-11-23"
 
 # Useful methods. \o/
 #
@@ -30,6 +30,7 @@ deactivate_previous_ruby_version () {
 _rbfu_activate () {
   local VERSION COMMAND MSG SOURCE RUBY_API_VERSION
   local RUBIES_ROOT="$HOME/.rubies"
+  local VERSION_DIR="$RUBY_VERSION_DIR"
 
   # Run-time configuration
   #
@@ -41,9 +42,9 @@ _rbfu_activate () {
   SOURCE="from command line"
 
   # fall back to ($RUBY_VERSION_DIR || $PWD)/.ruby-version if no version is given
-  if [ ! "$RUBY_VERSION_DIR" ]; then RUBY_VERSION_DIR="$PWD"; fi
+  if [ ! "$VERSION_DIR" ]; then VERSION_DIR="$PWD"; fi
   read_version_from_file () { if [ -f "$1" ]; then SOURCE="from $1"; VERSION=`head -n 1 $1`; fi; }
-  [ -n "$VERSION" ] || read_version_from_file "$RUBY_VERSION_DIR/.ruby-version"
+  [ -n "$VERSION" ] || read_version_from_file "$VERSION_DIR/.ruby-version"
   
   # sanity checks
   [ ! "$VERSION" ] && warn "Please specify the Ruby version to activate." && return 1

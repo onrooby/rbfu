@@ -1,5 +1,5 @@
 %define name rbfu
-%define version 2.0.2
+%define version 2.2.0
 %define release 1
 
 BuildRoot: %{_tmppath}/rbfu-root
