@@ -4,9 +4,9 @@
 require 'formula'
 
 class Rbfu < Formula
-  url 'https://github.com/onrooby/rbfu/tarball/v2.1.0'
+  url 'https://github.com/onrooby/rbfu/tarball/v2.2.0'
   homepage 'https://github.com/onrooby/rbfu'
-  sha256 '66ffddbbcaea8f84fc6257751e7f7fc5777c29955e0ad522a9dd85966a2af0ec'
+  sha256 '084232cbbb6db45d789e754fc4a87a9d0b3ae72f67627cb5dbcdd9e483359939'
   head 'https://github.com/onrooby/rbfu.git'
 
   def install
