@@ -17,7 +17,7 @@ class Rbfu < Formula
     system "rbfu --help"
   end
 
-  def caveats; <<-EOS.undent
+  def caveats; <<~EOS
     Please add the following line to your favorite shell startup script:
 
         eval "$(rbfu --init --auto)"
